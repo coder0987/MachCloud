@@ -135,7 +135,7 @@ function retrieveFile(filename, res) {
 function retrieveManifest(filename, res) {
     //Todo error handling if dir doesn't exist
     res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.write(getAllFilesFromFolder(filename));
+    res.write(JSON.stringify(getAllFilesFromFolder(filename)));
     return res.end();
 }
 

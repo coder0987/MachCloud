@@ -28,6 +28,13 @@ function loaded() {
             method: 'POST',
             credentials: 'include'
         });
+        //Get starting dir contents
+        const manifest = await fetch('/userdata/' + username.toLowerCase() + '/', {
+            method: 'GET',
+            credentials: 'include'
+        });
+        const manifestJSON = manifest.json();
+        loadFolder(manifestJSON, '/userdata/' + username.toLowerCase() + '/');
     }
 }
 
@@ -57,3 +64,15 @@ window.addEventListener('message', (event) => {
         document.getElementById('postSignIn').setAttribute('hidden','hidden');
     }
 }, false);
+
+function loadFolder(manifest, path) {
+    manifest = JSON.parse(manifest);
+    let baseFolder = document.getElementById('baseFolder');
+    for (let i in manifest) {
+        let fileItem = document.createElement('a');
+        fileItem.href = manifest[i];
+        fileItem.innerHTML = manifest[i];
+        fileItem.classList.add('col');
+        baseFolder.appendChild(fileItem);
+    }
+}

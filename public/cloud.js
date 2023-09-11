@@ -29,13 +29,18 @@ function loaded() {
             credentials: 'include'
         });
         //Get starting dir contents
-        const manifest = await fetch('/userdata/' + username.toLowerCase() + '/', {
-            method: 'GET',
-            credentials: 'include'
-        });
-        const manifestJSON = manifest.json();
-        loadFolder(manifestJSON, '/userdata/' + username.toLowerCase() + '/');
+        fetchDir('/userdata/' + username.toLowerCase() + '/');
+
     }
+}
+
+async function fetchDir(path) {
+    const manifest = await fetch(path, {
+        method: 'GET',
+        credentials: 'include'
+    });
+    const manifestJSON = manifest.json();
+    loadFolder(manifestJSON, path);
 }
 
 window.addEventListener('message', (event) => {

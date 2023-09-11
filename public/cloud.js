@@ -35,8 +35,12 @@ window.addEventListener('message', (event) => {
         let accHandler = document.getElementById('accountHandler');
         accHandler.innerHTML = 'Sign Out (' + username + ')';
         accHandler.href = 'https://sso.smach.us/?signOut=true&redirect=https://cloud.smach.us/';
+        document.getElementById('postSignIn').removeAttribute('hidden');
+        document.getElementById('preSignIn').setAttribute('hidden','hidden');
     } else {
         document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.getElementById('preSignIn').removeAttribute('hidden');
+        document.getElementById('postSignIn').setAttribute('hidden','hidden');
     }
 }, false);

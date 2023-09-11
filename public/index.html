@@ -36,7 +36,18 @@
     </div>
     <div class="container" hidden="hidden" id="postSignIn">
         <div class="row">
-
+            <p>Upload a file:</p>
+            <form
+                    action="/userdata"
+                    method="POST"
+                    id="uploadForm"
+                    enctype="multipart/form-data"
+            >
+                <label for="File">File: </label>
+                <input id="File" type="file" name="standardUpload">
+                <br>
+                <input type="submit" value="Upload File">
+            </form>
         </div>
     </div>
 

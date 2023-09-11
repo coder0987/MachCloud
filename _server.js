@@ -154,19 +154,28 @@ const usersCache = {};
 
 function verifyUserInfo(username, token) {
     try {
+        username = username.toLowerCase()
+
         const options = {
             hostname: 'sso.samts.us',
             path: '/verify',
             method: 'POST',
             protocol: 'https:',
             headers: {
-                'Authorization': username.toLowerCase() + ':' + token
+                'Authorization': username + ':' + token
             }
         };
         const req = https.request(options, (res) => {
             if (res.statusCode !== 200) {
                 console.log('User ' + username + ' successfully signed in');
                 usersCache[username] = token;
+                if (!fs.existsSync(path.join(__dirname, username))) {
+                    fs.mkdir(path.join(__dirname, username), (err) => {
+                        if (err) {
+                            return console.error(err);
+                        }
+                    });
+                }
             }
         }).on("error", (err) => {
             console.log("Error: ", err);

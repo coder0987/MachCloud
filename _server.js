@@ -61,7 +61,12 @@ const upload = multer({
 
 app.post('/userdata/', upload.single('standardUpload'), (req, res) => {
     return res.end();
-})
+});
+
+app.post('/signIn', (req, res) => {
+    let currentCookies = getCookies(req);
+    verifyUserInfo(currentCookies['username'], currentCookies['token']);
+});
 
 app.use(express.static(__dirname + '/public'));
 

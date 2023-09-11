@@ -24,7 +24,10 @@ function loaded() {
         accHandler.href = 'https://sso.smach.us/?signOut=true&redirect=https://cloud.smach.us/';
         document.getElementById('postSignIn').removeAttribute('hidden');
         document.getElementById('preSignIn').setAttribute('hidden','hidden');
-
+        fetch('/signIn', {
+            method: 'POST',
+            credentials: 'include'
+        });
     }
 }
 
@@ -40,7 +43,14 @@ window.addEventListener('message', (event) => {
         accHandler.href = 'https://sso.smach.us/?signOut=true&redirect=https://cloud.smach.us/';
         document.getElementById('postSignIn').removeAttribute('hidden');
         document.getElementById('preSignIn').setAttribute('hidden','hidden');
+        fetch('/signIn', {
+            method: 'POST',
+            credentials: 'include'
+        });
     } else {
+        let accHandler = document.getElementById('accountHandler');
+        accHandler.innerHTML = 'Sign In';
+        accHandler.href = 'https://sso.smach.us/?redirect=https://cloud.smach.us/';
         document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.getElementById('preSignIn').removeAttribute('hidden');

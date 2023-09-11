@@ -24,6 +24,19 @@ const MIME_TYPE = {
     '.php': 'text/x-php'
 };
 
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    //Verify user info --todo
+
+    cb(null, '/userdata/' + getCookies(req)['username'] + '/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+
 const upload = multer({
     dest: '/userdata/',
 //destination folder is automatically created if it's not available
@@ -33,24 +46,9 @@ const upload = multer({
     fileFilter: (req, file, callback) => {
         console.log(file);
         callback(undefined, true);
-    }
-
-})
-
-const storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        fs.mkdir('userdata', function (err) {
-            if (err) {
-                console.log(err.stack)
-            } else {
-                callback(null, './userdata');
-            }
-        })
     },
-    filename: function (req, file, callback) {
-        callback(null, file.fieldname);
-    }
-});
+    storage: storage
+})
 
 
 
@@ -58,15 +56,15 @@ app.post('/userdata/', upload.single('standardUpload'), (req, res) => {
     //User verification
     //--not implemented yet
 
-    console.log(req.file, req.body)
+    //console.log(req.file, req.body)
 
     //Write the file
-    fs.writeFile('./userdata/' + getCookies(req)['username'] + req.file.originalname, req.file.buffer, err => {
-      if (err) {
-        console.error(err);
-      }
-      // file written successfully
-    });
+//    fs.writeFile('./userdata/' + getCookies(req)['username'] + req.file.originalname, req.file.buffer, err => {
+//      if (err) {
+//        console.error(err);
+//      }
+//      // file written successfully
+//    });
     return res.end();
 })
 

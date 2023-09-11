@@ -28,7 +28,7 @@ const upload = multer({
     dest: '/userdata/',
 //destination folder is automatically created if it's not available
     limits: {
-        fileSize: 5000000 // 5mb
+        fileSize: 5000000000 // 5gb
     },
     fileFilter: (req, file, callback) => {
         console.log(file);
@@ -58,8 +58,10 @@ app.post('/userdata/', upload.single('standardUpload'), (req, res) => {
     //User verification
     //--not implemented yet
 
+    console.log(req.file, req.body)
+
     //Write the file
-    fs.writeFile('./userdata/' + getCookies(req)['username'] + req.file.fieldname, req.file, err => {
+    fs.writeFile('./userdata/' + getCookies(req)['username'] + req.file.originalname, req.file.buffer, err => {
       if (err) {
         console.error(err);
       }

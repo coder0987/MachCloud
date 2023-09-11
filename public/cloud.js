@@ -22,8 +22,6 @@ function loaded() {
     if (username) {
         accHandler.innerHTML = 'Sign Out (' + username + ')';
         accHandler.href = 'https://sso.smach.us/?signOut=true&redirect=https://cloud.smach.us/';
-        document.getElementById('postSignIn').removeAttribute('hidden');
-        document.getElementById('preSignIn').setAttribute('hidden','hidden');
     }
 }
 

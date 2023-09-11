@@ -55,7 +55,17 @@ const storage = multer.diskStorage({
 
 
 app.post('/userdata/', upload.single('standardUpload'), (req, res) => {
-    res.end();
+    //User verification
+    //--not implemented yet
+
+    //Write the file
+    fs.writeFile('./userdata/' + getCookies(req)['username'] + req.file.fieldname, req.file, err => {
+      if (err) {
+        console.error(err);
+      }
+      // file written successfully
+    });
+    return res.end();
 })
 
 app.use(express.static(__dirname + '/public'));

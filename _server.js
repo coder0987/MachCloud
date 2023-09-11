@@ -1,4 +1,5 @@
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const fs = require('fs');
 const path = require('path');
@@ -30,14 +31,14 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     //Verify user info
     let currentCookies = getCookies(req);
-    if (currentCookies['username'].toLowerCase()] &&
-        currentCookies['username'].toLowerCase()] == currentCookies['token']) {
-        cb(null, '/userdata/' + currentCookies['username'].toLowerCase() + '/');
+    if (usersCache[currentCookies['username'].toLowerCase()] &&
+        usersCache[currentCookies['username'].toLowerCase()] == currentCookies['token']) {
+        cb(null, path.join(path.join(__dirname,'userdata'), getCookies(req)['username'].toLowerCase()));
         return;
     }
+    console.log(currentCookies['username'] + JSON.stringify(usersCache));
     verifyUserInfo(currentCookies['username'], currentCookies['token']);
     cb(new Error('No username'), null);
-
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname)
@@ -51,7 +52,7 @@ const upload = multer({
         fileSize: 5000000000 // 5gb
     },
     fileFilter: (req, file, callback) => {
-        console.log(file);
+        //console.log(file);
         callback(undefined, true);
     },
     storage: storage
@@ -153,11 +154,12 @@ function getAllFilesFromFolder(dir) {
 const usersCache = {};
 
 function verifyUserInfo(username, token) {
+    console.log('Attempting user verification for user ' + username);
     try {
         username = username.toLowerCase()
 
         const options = {
-            hostname: 'sso.samts.us',
+            hostname: 'sso.smach.us',
             path: '/verify',
             method: 'POST',
             protocol: 'https:',
@@ -166,16 +168,19 @@ function verifyUserInfo(username, token) {
             }
         };
         const req = https.request(options, (res) => {
-            if (res.statusCode !== 200) {
+            if (res.statusCode == 200) {
                 console.log('User ' + username + ' successfully signed in');
                 usersCache[username] = token;
-                if (!fs.existsSync(path.join(__dirname, username))) {
-                    fs.mkdir(path.join(__dirname, username), (err) => {
+                if (!fs.existsSync(path.join(__dirname,path.join('userdata', username)))) {
+                    console.log('Creating user home directory ' + path.join(__dirname,path.join('userdata', username)));
+                    fs.mkdir(path.join(__dirname,path.join('userdata', username)), (err) => {
                         if (err) {
                             return console.error(err);
                         }
                     });
                 }
+            } else {
+                console.log('User verification for ' + username + ' failed with status code ' + res.statusCode);
             }
         }).on("error", (err) => {
             console.log("Error: ", err);

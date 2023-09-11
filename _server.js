@@ -28,9 +28,16 @@ const MIME_TYPE = {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    //Verify user info --todo
+    //Verify user info
+    let currentCookies = getCookies(req);
+    if (currentCookies['username'].toLowerCase()] &&
+        currentCookies['username'].toLowerCase()] == currentCookies['token']) {
+        cb(null, '/userdata/' + currentCookies['username'].toLowerCase() + '/');
+        return;
+    }
+    verifyUserInfo(currentCookies['username'], currentCookies['token']);
+    cb(new Error('No username'), null);
 
-    cb(null, '/userdata/' + getCookies(req)['username'] + '/');
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname)
@@ -53,18 +60,6 @@ const upload = multer({
 
 
 app.post('/userdata/', upload.single('standardUpload'), (req, res) => {
-    //User verification
-    //--not implemented yet
-
-    //console.log(req.file, req.body)
-
-    //Write the file
-//    fs.writeFile('./userdata/' + getCookies(req)['username'] + req.file.originalname, req.file.buffer, err => {
-//      if (err) {
-//        console.error(err);
-//      }
-//      // file written successfully
-//    });
     return res.end();
 })
 

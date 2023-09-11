@@ -1,0 +1,29 @@
+:root {
+    --gold: #ebb866;
+    --black: #2d2d2b;
+    --black-hover: rgb(0,0,0);
+    --white: #f7f9f8;
+    --green: #006e00;
+    --light-green: #446e44;
+    --gold-hover: rgb(235,200,0);
+    --light-blue: rgb(100,200,255);
+
+    --header: var(--black);
+    --header-text: var(--gold);
+    --background: var(--light-blue);
+    --text: var(--green);
+    --link: var(--gold);
+    --link-hover: var(--gold-hover);
+
+    --light-link: rgb(255,255,255);
+    --light-link-hover: rgb(200,200,200);
+
+    --background-light: var(--white);
+    --text-light: var(--black);
+}
+
+body {
+    background: var(--light-blue);
+    color: var(--white);
+    font-weight: 900;
+}

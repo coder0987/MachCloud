@@ -55,8 +55,7 @@ const storage = multer.diskStorage({
 
 
 app.post('/userdata/', upload.single('standardUpload'), (req, res) => {
-    res.redirect('/userdata');
-    res.json({data: "success"})
+    res.end();
 })
 
 app.use(express.static(__dirname + '/public'));

@@ -8,6 +8,7 @@
     --gold-hover: rgb(235,200,0);
     --light-blue: rgb(100,200,255);
     --med-blue: rgb(80, 180, 240);
+    --med-blue-hover: rgb(40, 150, 230);
 
     --header: var(--black);
     --header-text: var(--gold);
@@ -35,4 +36,9 @@ body {
     background: var(--med-blue);
     padding: 10px;
     text-decoration: none;
+    margin-bottom: 10px;
+}
+.file:hover {
+    color: var(--light-link-hover);
+    background: var(--med-blue-hover);
 }

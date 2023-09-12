@@ -27,3 +27,8 @@ body {
     color: var(--white);
     font-weight: 900;
 }
+
+a {
+    color: var(--white);
+
+}

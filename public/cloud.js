@@ -79,11 +79,11 @@ function loadFolder(manifest, path) {
         let fileItem = document.createElement('a');
         fileItem.href = manifest[i];
         fileItem.innerHTML = manifest[i];
-        fileItem.classList.add('col');
+        fileItem.classList.add('col-12');
         let downloadName = manifest[i].split('_');
         downloadName.splice(0,2);
         downloadName = downloadName.join('_');
-        fileItem.download = manifest[i];
+        fileItem.download = downloadName;
         baseFolder.appendChild(fileItem);
     }
 }

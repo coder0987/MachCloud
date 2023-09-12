@@ -77,13 +77,14 @@ function loadFolder(manifest, path) {
     let baseFolder = document.getElementById('baseFolder');
     for (let i in manifest) {
         let fileItem = document.createElement('a');
-        fileItem.href = manifest[i];
-        fileItem.innerHTML = manifest[i];
-        fileItem.classList.add('col-12');
         let downloadName = manifest[i].split('_');
         downloadName.splice(0,2);
         downloadName = downloadName.join('_');
         fileItem.download = downloadName;
+        fileItem.href = manifest[i];
+        fileItem.innerHTML = downloadName;
+        fileItem.classList.add('col-12');
+        fileItem.classList.add('file');
         baseFolder.appendChild(fileItem);
     }
 }

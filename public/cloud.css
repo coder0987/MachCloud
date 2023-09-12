@@ -7,6 +7,7 @@
     --light-green: #446e44;
     --gold-hover: rgb(235,200,0);
     --light-blue: rgb(100,200,255);
+    --med-blue: rgb(80, 180, 240);
 
     --header: var(--black);
     --header-text: var(--gold);
@@ -28,7 +29,10 @@ body {
     font-weight: 900;
 }
 
-a {
+.file {
     color: var(--white);
-
+    border-radius: 20px;
+    background: var(--med-blue);
+    padding: 20px;
+    height: 2rem;
 }

@@ -71,7 +71,7 @@ app.post('/signIn', (req, res) => {
 
 app.use(express.static(__dirname + '/public'));
 
-app.get('/userdata/', (req, res) => {
+app.get('/userdata/*', (req, res) => {
     //Retrieving data or uploading file
     let currentCookies = getCookies(req);
     if (usersCache[currentCookies['username']] == currentCookies['token']) {

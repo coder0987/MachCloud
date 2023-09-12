@@ -27,9 +27,10 @@ function loaded() {
         fetch('/signIn', {
             method: 'POST',
             credentials: 'include'
+        }).then(() => {
+            fetchDir('/userdata/' + username.toLowerCase() + '/');
         });
         //Get starting dir contents
-        fetchDir('/userdata/' + username.toLowerCase() + '/');
 
     }
 }

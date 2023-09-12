@@ -97,7 +97,7 @@ app.get('/userdata/*', (req, res) => {
         //Verified
 
         //User will be authorized in 2 cases: folder name matches username or item is shared with user. Shared items will be stored via symlink in /userdata/USERNAME/shared
-        if (filenameItemization[2] == username.toLowerCase()) {
+        if (filenameItemization[2] == currentCookies['username'].toLowerCase()) {
             //User is allowed
             //File retrieval
             if (filename.lastIndexOf('/') >= filename.length - 1) {
@@ -153,9 +153,9 @@ function retrieveManifest(filename, res) {
 function getAllFilesFromFolder(dir) {
     const results = [];
 
-    filesystem.readdirSync(dir).forEach(function(file) {
-        file = dir+'/'+file;
-        let stat = filesystem.statSync(file);
+    fs.readdirSync(dir).forEach(function(file) {
+        file = dir+file;
+        let stat = fs.statSync(file);
         results.push(file);
     });
 

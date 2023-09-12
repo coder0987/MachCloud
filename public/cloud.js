@@ -41,7 +41,7 @@ async function fetchDir(path) {
         method: 'GET',
         credentials: 'include'
     });
-    const manifestJSON = manifest.json();
+    const manifestJSON = await manifest.json();
     loadFolder(manifestJSON, path);
 }
 
@@ -74,7 +74,6 @@ window.addEventListener('message', (event) => {
 
 function loadFolder(manifest, path) {
     console.log(manifest);
-    manifest = JSON.parse(manifest);
     let baseFolder = document.getElementById('baseFolder');
     for (let i in manifest) {
         let fileItem = document.createElement('a');

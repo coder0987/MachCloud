@@ -61,24 +61,40 @@ const upload = multer({
 
 
 app.post('/userdata/', upload.single('standardUpload'), (req, res) => {
+    res.redirect('/');
     return res.end();
 });
 
 app.post('/signIn', (req, res) => {
     let currentCookies = getCookies(req);
-    verifyUserInfo(currentCookies['username'], currentCookies['token']);
+    let myPromise = verifyUserInfo(currentCookies['username'], currentCookies['token']);
+    myPromise.then(
+        (theToken) => {
+            if (theToken == currentCookies['token']) {
+                res.writeHead(200);
+            } else {
+                console.log(theToken);
+                res.writeHead(400);
+            }
+            return res.end();
+        }
+    ).catch((err) => {
+        console.log(err);
+    });
+
 });
 
 app.use(express.static(__dirname + '/public'));
 
 app.get('/userdata/*', (req, res) => {
+
     //Retrieving data or uploading file
     let currentCookies = getCookies(req);
-    if (usersCache[currentCookies['username']] == currentCookies['token']) {
+    if (usersCache[currentCookies['username'].toLowerCase()] == currentCookies['token']) {
         //Verified
 
         //User will be authorized in 2 cases: folder name matches username or item is shared with user. Shared items will be stored via symlink in /userdata/USERNAME/shared
-        if (filenameItemization[2] == username.toLowerCase) {
+        if (filenameItemization[2] == username.toLowerCase()) {
             //User is allowed
             //File retrieval
             if (filename.lastIndexOf('/') >= filename.length - 1) {
@@ -94,7 +110,8 @@ app.get('/userdata/*', (req, res) => {
         }
 
     } else {
-        verifyUserInfo(currentCookies['username'], currentCookies['token']);
+        console.log('User ' + currentCookies['username'] + ' is not properly verified');
+        verifyUserInfo(currentCookies['username'].toLowerCase(), currentCookies['token']);
         res.writeHead(403);
         return res.end();
     }
@@ -144,8 +161,9 @@ function getAllFilesFromFolder(dir) {
 
 const usersCache = {};
 
-function verifyUserInfo(username, token) {
+async function verifyUserInfo(username, token) {
     console.log('Attempting user verification for user ' + username);
+    let reqPromise;
     try {
         username = username.toLowerCase()
 
@@ -158,27 +176,32 @@ function verifyUserInfo(username, token) {
                 'Authorization': username + ':' + token
             }
         };
-        const req = https.request(options, (res) => {
-            if (res.statusCode == 200) {
-                console.log('User ' + username + ' successfully signed in');
-                usersCache[username] = token;
-                if (!fs.existsSync(path.join(__dirname,path.join('userdata', username)))) {
-                    console.log('Creating user home directory ' + path.join(__dirname,path.join('userdata', username)));
-                    fs.mkdir(path.join(__dirname,path.join('userdata', username)), (err) => {
-                        if (err) {
-                            return console.error(err);
-                        }
-                    });
+        reqPromise = new Promise( (resolve, reject) => {
+            https.request(options, (res) => {
+                if (res.statusCode == 200) {
+                    console.log('User ' + username + ' successfully signed in');
+                    usersCache[username] = token;
+                    if (!fs.existsSync(path.join(__dirname,path.join('userdata', username)))) {
+                        console.log('Creating user home directory ' + path.join(__dirname,path.join('userdata', username)));
+                        fs.mkdir(path.join(__dirname,path.join('userdata', username)), (err) => {
+                            if (err) {
+                                resolve(usersCache[username]);
+                                return console.error(err);
+                            }
+                        });
+                    }
+                    resolve(usersCache[username]);
+                } else {
+                    reject('User verification for ' + username + ' failed with status code ' + res.statusCode);
                 }
-            } else {
-                console.log('User verification for ' + username + ' failed with status code ' + res.statusCode);
-            }
-        }).on("error", (err) => {
-            console.log("Error: ", err);
-        }).end();
+            }).on("error", (err) => {
+                reject("Error: ", err);
+            }).end();
+        });
     } catch (err) {
         console.log(err);
     }
+    return reqPromise;//null if it failed, otherwise a promise that returns a string
 }
 
 function getCookies(req) {

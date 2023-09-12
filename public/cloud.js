@@ -28,6 +28,7 @@ function loaded() {
             method: 'POST',
             credentials: 'include'
         }).then(() => {
+            console.log('Fetching manifest...');
             fetchDir('/userdata/' + username.toLowerCase() + '/');
         });
         //Get starting dir contents

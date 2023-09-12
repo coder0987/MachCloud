@@ -80,6 +80,7 @@ function loadFolder(manifest, path) {
         fileItem.href = manifest[i];
         fileItem.innerHTML = manifest[i];
         fileItem.classList.add('col');
+        fileItem.download = manifest[i];
         baseFolder.appendChild(fileItem);
     }
 }

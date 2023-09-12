@@ -31,8 +31,7 @@ body {
 
 .file {
     color: var(--white);
-    border-radius: 20px;
+    border-radius: 10px;
     background: var(--med-blue);
-    padding: 20px;
-    height: 2rem;
+    padding: 10px;
 }

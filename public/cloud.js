@@ -77,9 +77,9 @@ function loadFolder(manifest, path) {
     let baseFolder = document.getElementById('baseFolder');
     for (let i in manifest) {
         let fileItem = document.createElement('a');
-        let downloadName = manifest[i].split('_');
+        let downloadName = manifest[i].split('/');
         downloadName.splice(0,2);
-        downloadName = downloadName.join('_');
+        downloadName = downloadName.join('');
         fileItem.download = downloadName;
         fileItem.href = manifest[i];
         fileItem.innerHTML = downloadName;

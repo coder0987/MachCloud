@@ -87,6 +87,9 @@ app.post('/signIn', (req, res) => {
 app.use(express.static(__dirname + '/public'));
 
 app.get('/userdata/*', (req, res) => {
+    let q = url.parse(req.url, true);
+    let filename = '.' + q.pathname;
+    let filenameItemization = filename.split('/');
 
     //Retrieving data or uploading file
     let currentCookies = getCookies(req);

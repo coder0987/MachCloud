@@ -71,41 +71,32 @@ app.post('/signIn', (req, res) => {
 
 app.use(express.static(__dirname + '/public'));
 
-const server = app.get(function (req, res) {
-    let q = url.parse(req.url, true);
-    let filename = '.' + q.pathname;
+app.get('/userdata/', (req, res) => {
+    //Retrieving data or uploading file
+    let currentCookies = getCookies(req);
+    if (usersCache[currentCookies['username']] == currentCookies['token']) {
+        //Verified
 
-    let filenameItemization = filename.split('/');
-    if (filenameItemization[1] == 'userdata') {
-        //Retrieving data or uploading file
-        let currentCookies = getCookies(req);
-        if (usersCache[currentCookies['username']] == currentCookies['token']) {
-            //Verified
-
-            //User will be authorized in 2 cases: folder name matches username or item is shared with user. Shared items will be stored via symlink in /userdata/USERNAME/shared
-            if (filenameItemization[2] == username.toLowerCase) {
-                //User is allowed
-                switch (req.method) {
-                    case 'GET':
-                        //File retrieval
-                        if (filename.lastIndexOf('/') >= filename.length - 1) {
-                            //Return a manifest of the folder
-                            return retrieveManifest(filename, res);
-                        } else {
-                            return retrieveFile(filename, res);
-                        }
-                }
+        //User will be authorized in 2 cases: folder name matches username or item is shared with user. Shared items will be stored via symlink in /userdata/USERNAME/shared
+        if (filenameItemization[2] == username.toLowerCase) {
+            //User is allowed
+            //File retrieval
+            if (filename.lastIndexOf('/') >= filename.length - 1) {
+                //Return a manifest of the folder
+                return retrieveManifest(filename, res);
             } else {
-                //Restricted area
-                res.writeHead(403);
-                return res.end();
+                return retrieveFile(filename, res);
             }
-
         } else {
-            verifyUserInfo(currentCookies['username'], currentCookies['token']);
+            //Restricted area
             res.writeHead(403);
             return res.end();
         }
+
+    } else {
+        verifyUserInfo(currentCookies['username'], currentCookies['token']);
+        res.writeHead(403);
+        return res.end();
     }
 });
 

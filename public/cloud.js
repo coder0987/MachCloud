@@ -71,6 +71,7 @@ window.addEventListener('message', (event) => {
 }, false);
 
 function loadFolder(manifest, path) {
+    console.log(manifest);
     manifest = JSON.parse(manifest);
     let baseFolder = document.getElementById('baseFolder');
     for (let i in manifest) {
